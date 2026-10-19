@@ -16,18 +16,18 @@ function redirect(url, pathname) {
 }
 
 // Vercel's canonical form for a path, or null when it is already canonical.
+// Rules measured against the live site 2026-10-19 (and Vercel's routing-utils):
+// a cleanUrls redirect (drop index or .html) is final; a trailing slash comes off
+// only when the last segment ends in a .word extension; one is added only when the
+// last segment has no dot; /.well-known/ skips the slash rules but not cleanUrls.
 function canonical(pathname) {
   let p = pathname.replace(/\/{2,}/g, '/');
-  if (p.startsWith('/.well-known/')) return p === pathname ? null : p;
-  // cleanUrls: drop "index" and ".html"
-  p = p.replace(/\/index(\.html)?\/?$/i, '/');
-  p = p.replace(/\.html\/?$/i, '/');
-  const last = p.slice(p.lastIndexOf('/') + 1);
-  if (p !== '/' && p.endsWith('/')) {
-    const seg = p.slice(0, -1).slice(p.slice(0, -1).lastIndexOf('/') + 1);
-    if (seg.includes('.')) p = p.slice(0, -1); // a file never keeps a trailing slash
-  } else if (last && !last.includes('.')) {
-    p += '/'; // trailingSlash: every extensionless path gets one
+  const clean = p.replace(/\/index(\.html)?\/?$/i, '/').replace(/\.html\/?$/i, '/');
+  if (clean !== p) return clean;
+  if (!p.startsWith('/.well-known/')) {
+    const seg = (p.endsWith('/') ? p.slice(0, -1) : p).split('/').pop();
+    if (p !== '/' && p.endsWith('/') && /\.\w+$/.test(seg)) p = p.slice(0, -1);
+    else if (!p.endsWith('/') && seg && !seg.includes('.')) p += '/';
   }
   return p === pathname ? null : p;
 }
