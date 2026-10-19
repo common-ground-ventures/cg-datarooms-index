@@ -1,0 +1,6 @@
+# Common Ground data rooms index. Public and indexable; only /private/ is excluded.
+User-agent: *
+Allow: /
+Disallow: /private/
+
+Sitemap: https://datarooms.commonground.ventures/sitemap.xml
