@@ -3,6 +3,9 @@
 // Runs before the asset lookup; anything it does not redirect goes to env.ASSETS.
 
 const CACHE = 'public, max-age=0, must-revalidate';
+// Cloudflare Web Analytics is not wanted on the data rooms (Jesse 10/24). The zone
+// injects its beacon into HTML unless the response says no-transform.
+const HTML_CACHE = CACHE + ', no-transform';
 
 function redirect(url, pathname) {
   return new Response(`Redirecting to ${pathname}${url.search}`, {
@@ -40,7 +43,8 @@ export default {
 
     const res = await env.ASSETS.fetch(request);
     const out = new Response(res.body, res);
-    out.headers.set('Cache-Control', CACHE);
+    const html = (res.headers.get('content-type') || '').toLowerCase().startsWith('text/html');
+    out.headers.set('Cache-Control', html ? HTML_CACHE : CACHE);
     out.headers.set('Access-Control-Allow-Origin', '*');
     if (res.status === 404) {
       return new Response('The page could not be found\n\nNOT_FOUND\n', {
