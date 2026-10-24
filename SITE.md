@@ -15,4 +15,4 @@ Upstream copy: the data room kit (rooms/_index). Migration pilot for the move to
 npm install, then npm run dev (http://localhost:8787).
 
 ## Review
-Changes go through a pull request. Codex reviews; Robbie (robbyproc87) can read any PR, his review is optional.
+Changes go through a pull request. Codex reviews; Robby (robbyproc87) can read any PR, his review is optional.
