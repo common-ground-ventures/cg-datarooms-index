@@ -1,0 +1,10 @@
+{
+  "note": "Known findings on the day the gate was wired. Each entry is debt to fix, not a permission. Shrink it; never grow it without review.",
+  "export_commit": "bea86655ec26e90868acfcc3b75cf4008f8ae7b4",
+  "findings": [
+    {
+      "fingerprint": "NAME-RETIRED-KINWORK|index.html|Kinwork",
+      "count": 1
+    }
+  ]
+}
